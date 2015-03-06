@@ -16,7 +16,7 @@ function downloadable_register_shortcodes() {
     add_shortcode('downloadable', 'downloadable_download');
 }
 
-function downloadable_handleDir($path, $dir, $depth, $max_files_in_dir) {
+function downloadable_handleDir($path, $dir, $depth, $max_files_in_dir, $exclude_dirs, $include_dirs) {
     if($depth < 0) return '';
 
     $s = '<h2>' . $dir . '</h2><ul>';
@@ -26,11 +26,15 @@ function downloadable_handleDir($path, $dir, $depth, $max_files_in_dir) {
     $arr = scandir($p, 1);
     $max = $max_files_in_dir;
     foreach($arr as $file) {
-        if ($file == "." || $file == "..")
+        if ($file == "." || $file == ".." || in_array($file, $exclude_dirs))
             continue;
 
         if(is_dir($p . '/' . $file))
-            $s = $s . downloadable_handleDir($p, $file, $depth);
+        {
+            if(count($include_dirs) > 0 && !in_array($file, $include_dirs))
+                continue;
+            $s = $s . downloadable_handleDir($p, $file, $depth, $max_files_in_dir, $exclude_dirs, $include_dirs);
+        }
         else
         {
             if($max == 0) continue;
@@ -71,16 +75,30 @@ function downloadable_download($args, $content) {
     else
         $max_files_in_dir = 1;
 
+    if(isset($args['exclude_dirs']))
+        $exclude_dirs = split(',', $args['exclude_dirs']);
+    else
+        $exclude_dirs = array();
+
+    if(isset($args['include_dirs']))
+        $include_dirs = split(',', $args['include_dirs']);
+    else
+        $include_dirs = array();
+
     $files = '';
 
     $arr = scandir($path, 1);
     $max = $max_files_in_dir;
     foreach($arr as $file) {
-        if ($file == "." || $file == "..")
+        if ($file == "." || $file == ".." || in_array($file, $exclude_dirs))
             continue;
 
         if(is_dir($path . '/' . $file))
-            $files = $files . downloadable_handleDir($path, $file, $depth, $max_files_in_dir);
+        {
+            if(count($include_dirs) > 0 && !in_array($file, $include_dirs))
+                continue;
+            $files = $files . downloadable_handleDir($path, $file, $depth, $max_files_in_dir, $exclude_dirs, $include_dirs);
+        }
         else
         {
             if($max == 0) continue;
