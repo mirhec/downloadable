@@ -11,3 +11,11 @@ wp-content
      |- downloadable.php
      |- img
 ```
+
+# How to use this plugin
+This plugin is a shortcode only plugin. Here are two examples how to use this plugin in a page or blog content:
+
+```
+[downloadable path="downloadable" max_files_in_dir="10" depth="3" include_dirs="Dir to include,Otherdir"]
+[downloadable path="downloadable" max_files_in_dir="10" depth="3" exclude_dirs="exclude-dir,exclude-dir2"]
+```
