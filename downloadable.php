@@ -26,12 +26,12 @@ function downloadable_handleDir($path, $dir, $depth, $max_files_in_dir, $exclude
     $arr = scandir($p, 1);
     $max = $max_files_in_dir;
     foreach($arr as $file) {
-        if ($file == "." || $file == ".." || in_array($file, $exclude_dirs))
+        if ($file == "." || $file == "..")
             continue;
 
         if(is_dir($p . '/' . $file))
         {
-            if(count($include_dirs) > 0 && !in_array($file, $include_dirs))
+            if(in_array($file, $exclude_dirs) || (count($include_dirs) > 0 && !in_array($file, $include_dirs)))
                 continue;
             $s = $s . downloadable_handleDir($p, $file, $depth, $max_files_in_dir, $exclude_dirs, $include_dirs);
         }
@@ -90,12 +90,12 @@ function downloadable_download($args, $content) {
     $arr = scandir($path, 1);
     $max = $max_files_in_dir;
     foreach($arr as $file) {
-        if ($file == "." || $file == ".." || in_array($file, $exclude_dirs))
+        if ($file == "." || $file == "..")
             continue;
 
         if(is_dir($path . '/' . $file))
         {
-            if(count($include_dirs) > 0 && !in_array($file, $include_dirs))
+            if(in_array($file, $exclude_dirs) || (count($include_dirs) > 0 && !in_array($file, $include_dirs)))
                 continue;
             $files = $files . downloadable_handleDir($path, $file, $depth, $max_files_in_dir, $exclude_dirs, $include_dirs);
         }
