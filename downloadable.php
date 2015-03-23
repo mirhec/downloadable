@@ -73,7 +73,7 @@ function downloadable_download($args, $content) {
     if(isset($args['max_files_in_dir']))
         $max_files_in_dir = $args['max_files_in_dir'];
     else
-        $max_files_in_dir = 1;
+        $max_files_in_dir = -1;
 
     if(isset($args['exclude_dirs']))
         $exclude_dirs = split(',', $args['exclude_dirs']);
@@ -102,7 +102,7 @@ function downloadable_download($args, $content) {
         else
         {
             if($max == 0) continue;
-            $files = $files . downloadable_handleFile($file);
+            $files = $files . downloadable_handleFile($path, $file);
             $max -= 1;
         }
     }
