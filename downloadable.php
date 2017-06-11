@@ -76,12 +76,12 @@ function downloadable_download($args, $content) {
         $max_files_in_dir = -1;
 
     if(isset($args['exclude_dirs']))
-        $exclude_dirs = split(',', $args['exclude_dirs']);
+        $exclude_dirs = explode(',', $args['exclude_dirs']);
     else
         $exclude_dirs = array();
 
     if(isset($args['include_dirs']))
-        $include_dirs = split(',', $args['include_dirs']);
+        $include_dirs = explode(',', $args['include_dirs']);
     else
         $include_dirs = array();
 
